@@ -14,9 +14,9 @@ public class Order {
    
 	/**
 	 * 
-	 * @param id
+	 * @param id of the order
 	 * @param customerName
-	 * @param requestedParts
+	 * @param requestedParts number
 	 * @param fulfilled
 	 * initialized the fields of the Order class
 	 */

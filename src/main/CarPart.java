@@ -12,9 +12,9 @@ public class CarPart {
 	
 	/**
 	 * 
-	 * @param id
-	 * @param name
-	 * @param weight
+	 * @param id of the carPart
+	 * @param name of the car Part
+	 * @param weight of the car part
 	 * @param isDefective
 	 * initialized fields of the CarPart class
 	 */

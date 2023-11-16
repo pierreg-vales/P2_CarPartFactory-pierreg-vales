@@ -23,10 +23,10 @@ public class PartMachine {
 	
 	/**
 	 * 
-	 * @param id
-	 * @param p1
-	 * @param period
-	 * @param weightError
+	 * @param id of the carPart
+	 * @param p1 car part
+	 * @param period of production of the car parts
+	 * @param weightError 
 	 * @param chanceOfDefective
 	 * initialized the private fields of the class
 	 * -for time i created a queue using period
