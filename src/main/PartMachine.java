@@ -12,7 +12,7 @@ public class PartMachine {
 	private int period;
 	private int defectiveChance;
 	private Queue<Integer> timer = new ListQueue<Integer>();
-	private int totalPartsProduced;
+	private int totalPartsProduced = 0;
 	private Queue<CarPart> conveyorBelt = new ListQueue<CarPart>();
 	private Random random = new Random();
 	
@@ -90,6 +90,7 @@ public class PartMachine {
         int iterator = 0;
         while (iterator < 10) {
         	conveyorBelt.enqueue(null);
+        	iterator++;
         }
     }
     
