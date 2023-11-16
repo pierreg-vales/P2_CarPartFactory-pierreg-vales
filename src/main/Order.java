@@ -4,11 +4,22 @@ import interfaces.Map;
 
 public class Order {
 	
+	/**
+	 * private fields of the Order class
+	 */
 	private int id;
 	private String customerName;
 	private Map<Integer,Integer> requestedParts;
 	private boolean fulfilled;
    
+	/**
+	 * 
+	 * @param id
+	 * @param customerName
+	 * @param requestedParts
+	 * @param fulfilled
+	 * initialized the fields of the Order class
+	 */
     public Order(int id, String customerName, Map<Integer, Integer> requestedParts, boolean fulfilled) {
         this.id = id;
         this.customerName = customerName;
@@ -16,6 +27,7 @@ public class Order {
         this.fulfilled = fulfilled;
     }
     
+ 
     public int getId() {
         return this.id;
     }

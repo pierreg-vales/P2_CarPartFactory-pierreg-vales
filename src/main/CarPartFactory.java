@@ -14,6 +14,9 @@ import interfaces.Stack;
 
 public class CarPartFactory {
 	
+	/**
+	 * created all the fields in the class
+	 */
 	private List<PartMachine> machines;
 	private List<Order> orders;
 	private Map<Integer, CarPart> partCatalog;
@@ -21,7 +24,16 @@ public class CarPartFactory {
 	private Map<Integer, Integer> defective;
 	private Stack<CarPart> productionBin;
 
-        
+    /**
+     *     
+     * @param orderPath
+     * @param partsPath
+     * @throws IOException
+     * -initialized machines, orders, partCatalog, and inventory using other methods
+     * -initialized productionBin as a LinkedStack because I wanted it to work as if I'm putting the parts in the 
+     * bin physically and the first one you grab is the last one you put.
+     * -initialized the defective map with all the keys and with the value 0 so that I can later sum the defective parts
+     */
     public CarPartFactory(String orderPath, String partsPath) throws IOException {
     	setupOrders(orderPath);
     	setupMachines(partsPath);
@@ -81,6 +93,14 @@ public class CarPartFactory {
         this.defective = defectives;
     }
 
+    /**
+     * 
+     * @param path
+     * @throws IOException
+     * -initialized orders as a singly linked list because i wanted it to simulate a queue so the most efficient is the 
+     * singly linked list because i just need to iterate in order and it does not have to reallocate either.
+     * -used buffered reader to read the path file. divided the lines into each element and then created the orders individually 
+     */
     public void setupOrders(String path) throws IOException {
         orders = new SinglyLinkedList<Order>();
         BufferedReader orderReader = new BufferedReader(new FileReader(path));
@@ -105,6 +125,15 @@ public class CarPartFactory {
         orderReader.close();
         
     }
+    
+    /**
+     * 
+     * @param path
+     * @throws IOException
+     * -initialize machine as a singly linked list because of low memory usage and easy iteration. 
+     * -used the same logic as setupOrders but in this case first I created the machines list to then create the
+     * map of the partCatalog with the machines size as initial size and the carParts inside it. 
+     */
     public void setupMachines(String path) throws IOException {
     	machines = new SinglyLinkedList<PartMachine>();
     	BufferedReader machineReader = new BufferedReader(new FileReader(path));
@@ -129,7 +158,11 @@ public class CarPartFactory {
     	}
     	
     }
-
+    
+    /**
+     * -initialized inventory as a map. 
+     * -ran through the machines and added an emtpy list to the value with the part id as the key. 
+     */
     public void setupInventory() {
         inventory = new HashTableSC<Integer, List<CarPart>>(partCatalog.size(), new BasicHashFunction());
         for (PartMachine partMachine : machines) {
@@ -138,6 +171,12 @@ public class CarPartFactory {
         }
         
     }
+    
+    /**
+     * ran a while until the production bin was empty, if the part was not detective it added it to the inventory
+     * if it was the defective count increased by one.
+     * at the end the production bin removed the top. 
+     */
     public void storeInInventory() {
     	while (!productionBin.isEmpty()) {
     		CarPart carPart = productionBin.top();
@@ -152,6 +191,16 @@ public class CarPartFactory {
     	}
     	
     }
+    
+    /**
+     * 
+     * @param days
+     * @param minutes
+     * -ran 3 nested for loops where days is the outer one, the next one is machines and the inner one is minutes
+     * -i did this because i wanted to produce all the parts of one machine int the minutes provided before changing machines
+     * -since i did this when the minutes loop endedn i could assume that the day was over for that machine so i could emtpy the conveyor
+     * belt in that same loop. 
+     */
     public void runFactory(int days, int minutes) {
         for (int i = 0; i<days; i++) {
         	for (PartMachine machine : machines) {
@@ -176,12 +225,23 @@ public class CarPartFactory {
         processOrders();
     }
     
+    /**
+     * 
+     * @param order
+     * @return
+     * -helper method of processOrders that checks if a order was fulfilled
+     * -created a map of the requested parts of the order parameter
+     * -ran a loop thought the key and inside if the inventory had the key and the requested parts was greater than
+     * the inventory's part list size then it change the fulfilled boolean to false and break.
+     * -else just fulfilled false and break
+     * -return fulfilled
+     */
     public boolean checkFulfilled(Order order) {
     	boolean fulfilled = true;
     	Map<Integer, Integer> requested = order.getRequestedParts();
     	for (Integer key : requested.getKeys()) {
     		if (inventory.containsKey(key)) {
-    			if (requested.get(key) >  inventory.get(key).size()) {
+    			if (requested.get(key) 	>  inventory.get(key).size()) {
     				fulfilled = false;
     				break;
     			}
@@ -193,7 +253,13 @@ public class CarPartFactory {
     	}
     	return fulfilled;
     }
-   
+    
+   /**
+    * -ran a for each loop through the orders list and called the checkFulfilled function with the order as the parameter
+    * -if the checkFulfilled returned true it sets the order setFulfilled to true. 
+    * -then ran throught the keys of the order and ran a for loop through the size of the inventory list and the
+    * quantity to remove the needed parts. 
+    */
     public void processOrders() {
         for (Order order : orders) {
         	if (checkFulfilled(order)) {
@@ -201,9 +267,11 @@ public class CarPartFactory {
         		for (Integer key : order.getRequestedParts().getKeys()) {
         			List<CarPart> parts = inventory.get(key);
         			int quantity = order.getRequestedParts().get(key);
-            		for (int count = 0; count < parts.size() && quantity > 0; count++) {
+        			int count = 0;
+            		while (count < parts.size() && quantity > 0) {
             			inventory.get(key).remove(0);
             			quantity--;
+            			count++;
             		}
             	}
         	}

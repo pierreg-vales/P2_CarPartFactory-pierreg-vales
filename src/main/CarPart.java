@@ -1,12 +1,23 @@
 package main;
 
 public class CarPart {
-    
+	
+    /**
+     * private fields of CarPart class
+     */
 	private int id;
 	private String name;
 	private double weight;
 	private boolean isDefective;
 	
+	/**
+	 * 
+	 * @param id
+	 * @param name
+	 * @param weight
+	 * @param isDefective
+	 * initialized fields of the CarPart class
+	 */
     public CarPart(int id, String name, double weight, boolean isDefective) {
         this.id = id;
         this.name = name;

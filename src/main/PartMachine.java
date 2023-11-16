@@ -6,6 +6,11 @@ import java.util.Random;
 
 public class PartMachine {
    
+	/**
+	 * private fields of PartMachine class, some variables are initialized here.
+	 * -initialized timer as queue
+	 * -initialized conveyorBelt as queue because it simulate a real one were new produced parts are at the end and older ones are at the front
+	 */
 	private int id;
 	private CarPart p1;
 	private double weightError;
@@ -16,6 +21,17 @@ public class PartMachine {
 	private Queue<CarPart> conveyorBelt = new ListQueue<CarPart>();
 	private Random random = new Random();
 	
+	/**
+	 * 
+	 * @param id
+	 * @param p1
+	 * @param period
+	 * @param weightError
+	 * @param chanceOfDefective
+	 * initialized the private fields of the class
+	 * -for time i created a queue using period
+	 * -for conveyorBelt i filled it with 10 null values
+	 */
     public PartMachine(int id, CarPart p1, int period, double weightError, int chanceOfDefective) {
         this.id = id;
         this.p1 = p1;
@@ -85,6 +101,9 @@ public class PartMachine {
         this.defectiveChance = chanceOfDefective;
     }
     
+    /**
+     * cleared the belt and the filled it again with 10 null elements. 
+     */
     public void resetConveyorBelt() {
         this.conveyorBelt.clear();
         int iterator = 0;
@@ -94,12 +113,26 @@ public class PartMachine {
         }
     }
     
+    /**
+     * returns the front of the queue and enqueues it again after dequeuing it. 
+     * @return
+     */
     public int tickTimer() {
         int result = this.getTimer().front();
         this.getTimer().enqueue(this.getTimer().dequeue());
         return result;
     }
     
+    /**
+     * 
+     * @return
+     * -set the weight, min and max weight with the error, and if it its defective
+     * -used the given equation to check if it was defective
+     * -if timer is 0 created the randomWeight and created a new car part with the information and added it ot the conveyor belt
+     * -increased total parts produced by one
+     * -if no part was produced a null element was enqueued
+     * -it returns the front of the conveyor belt
+     */
     public CarPart produceCarPart() {
     	double weight = this.getPart().getWeight();
     	double min = weight - this.getPartWeightError();
