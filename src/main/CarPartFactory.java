@@ -6,11 +6,8 @@ import java.io.IOException;
 
 import data_structures.HashTableSC;
 import data_structures.LinkedStack;
-import data_structures.ListQueue;
 import data_structures.SinglyLinkedList;
 import data_structures.BasicHashFunction;
-import data_structures.DoublyLinkedList;
-import interfaces.HashFunction;
 import interfaces.List;
 import interfaces.Map;
 import interfaces.Stack;
@@ -130,7 +127,6 @@ public class CarPartFactory {
     	for(PartMachine partMachine : machines) {
     		partCatalog.put(partMachine.getId(), partMachine.getPart());
     	}
-    	System.out.println(machines);
     	
     }
 
@@ -234,6 +230,8 @@ public class CarPartFactory {
         for (Order transaction : this.getOrders()) {
             report += transaction + "\n";
         }
+
+        
         System.out.println(report);
     }
 
