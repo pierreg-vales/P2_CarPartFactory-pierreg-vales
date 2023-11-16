@@ -151,7 +151,7 @@ public class CarPartFactory {
     		}
     		else {
     			defective.put(id, defective.get(id)+1);
-    		}
+    		} 
     		productionBin.pop();
     	}
     	
@@ -177,13 +177,20 @@ public class CarPartFactory {
         	}
         	storeInInventory();
         }
+        processOrders();
     }
     
     public boolean checkFulfilled(Order order) {
     	boolean fulfilled = true;
     	Map<Integer, Integer> requested = order.getRequestedParts();
     	for (Integer key : requested.getKeys()) {
-    		if (requested.get(key) >  inventory.get(key).size()) {
+    		if (inventory.containsKey(key)) {
+    			if (requested.get(key) >  inventory.get(key).size()) {
+    				fulfilled = false;
+    				break;
+    			}
+    		}
+    		else {
     			fulfilled = false;
     			break;
     		}
@@ -194,11 +201,18 @@ public class CarPartFactory {
     public void processOrders() {
         for (Order order : orders) {
         	if (checkFulfilled(order)) {
+        		order.setFulfilled(true);
         		for (Integer key : order.getRequestedParts().getKeys()) {
-            		for (int count = 0; count < order.getRequestedParts().get(key); count++) {
+        			List<CarPart> parts = inventory.get(key);
+        			int quantity = order.getRequestedParts().get(key);
+            		for (int count = 0; count < parts.size() && quantity > 0; count++) {
             			inventory.get(key).remove(0);
+            			quantity--;
             		}
             	}
+        	}
+        	else {
+        		order.setFulfilled(false);
         	}
         }
     }
